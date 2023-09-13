@@ -15,15 +15,19 @@ class Topic(models.Model):
 
 class Entry(models.Model):
 	"""Something specific learned about a topic."""
-	#foreign is reference to another record in database
+	#foreign is reference to another record in database, connects entry to specific topic
+	# on_delete means when topic all entries associated should also delete
 	topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+	# text of entries
 	text = models.TextField()
+	# present entries in order created with timestamp
 	date_added = models.DateTimeField(auto_now_add=True)
 
+	# holds extra info for managing model; here it specifies to use plural form when referring to mulitple entries
 	class Meta:
 		verbose_name_plural = 'entries'
 		
-
+	# show first 50 characters of text 
 	def __str__(self):
 		"""Return a string representation of the model."""
 		return f"{self.text[:50]}..."
