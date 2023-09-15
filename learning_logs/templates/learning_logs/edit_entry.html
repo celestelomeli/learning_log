@@ -1,0 +1,23 @@
+<!--template used to display form for editing an entry associated with a topic -->
+
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+
+    <!-- HTMl generates paragraph containing link with topic.id as parameter and braces displayed as value of topic variable passed to template -->
+	<p><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></p>
+
+	<p>Edit entry:</p>
+
+    
+    <!-- creates a form, with form data sent via HTTP POST request -->
+	<form action="{% url 'learning_logs:edit_entry' entry.id %}" method='post'>
+        <!--Cross-Site Request Forgery protection; inserts hidden input field w/ token value to protect from certain attacks -->
+		{% csrf_token %}
+        <!-- renders form in paragraph format -->
+		{{ form.as_p }}
+        <!-- create button in which form data will be submitted to URL in 'action' attribute -->
+		<button name='submit'>Save changes</button>
+	</form>
+
+{% endblock content %}
