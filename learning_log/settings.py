@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # My apps
     'learning_logs',
     'users',
+    'dry-brushlands-42278'
 
 
     # Default django apps
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+   
 
      # Third party apps.
     'bootstrap4',
