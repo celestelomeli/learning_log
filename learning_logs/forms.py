@@ -12,7 +12,7 @@ class TopicForm(forms.ModelForm):
 		# Do not generate label for text field 
 		labels = {'text': ''}
 
-# 
+
 class EntryForm(forms.ModelForm):
 	class Meta:
 		# model entryform is based on and fields to include
