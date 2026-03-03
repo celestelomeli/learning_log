@@ -37,14 +37,13 @@ def new_topic(request):
 		# No data submitted; create a blank form
 		form = TopicForm()
 	else:
-	# Post data submitted; process data.
+		# Post data submitted; process data.
 		form = TopicForm(data=request.POST)
 		if form.is_valid():
 			new_topic = form.save(commit=False)
 			new_topic.owner = request.user
 			new_topic.save()
-			#form.save()
-			#return redirect('learning_logs:topics')
+			return redirect('learning_logs:topics')
 
 	# Display a blank or invalid form
 	context = {'form': form}
@@ -53,7 +52,11 @@ def new_topic(request):
 @login_required
 def new_entry(request, topic_id):
 	"""Add a new entry for a particular topic."""
-	topic = Topic.objects.get(id=topic_id)
+	topic = get_object_or_404(Topic, id=topic_id)
+	
+	# Make sure the topic belongs to the current user
+	if topic.owner != request.user:
+		raise Http404
 
 	if request.method != 'POST':
 		# No data submitted; create a blank form
@@ -65,7 +68,6 @@ def new_entry(request, topic_id):
 			new_entry = form.save(commit=False)
 			new_entry.topic = topic
 			new_entry.save()
-			# two arguments: name of view we want to redirect to and argument view function requires
 			return redirect('learning_logs:topic', topic_id=topic_id)
 
 	# Display a blank or invalid form
@@ -75,11 +77,15 @@ def new_entry(request, topic_id):
 @login_required
 def edit_entry(request, entry_id):
 	"""Edit an existing entry"""
-	entry = Entry.objects.get(id=entry_id)
+	entry = get_object_or_404(Entry, id=entry_id)
 	topic = entry.topic
+	
+	# Make sure the topic belongs to the current user
+	if topic.owner != request.user:
+		raise Http404
 
 	if request.method != 'POST':
-		# Initial request; pre-fill form with current entry 
+		# Initial request; pre-fill form with current entry
 		form = EntryForm(instance=entry)
 	else:
 		# POST data submitted; process data
